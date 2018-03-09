@@ -11,7 +11,7 @@ var app = express();
 app.use(bodyParser.json());
 //Insert todo
 app.post('/todos', (req, res) => { 
-    console.log(req.body);
+ //   console.log(req.body);
 
     var todo = new Todo({
         text: req.body.text
@@ -27,11 +27,7 @@ app.post('/todos', (req, res) => {
 
 
     }, (err) => {
-        res.status(400).send({
-            status: 'Bad request',
-            code: 400,
-            Error: err
-           });
+        res.status(400).send(err);
            console.log('Unable to save todo:',err);
            
     });
@@ -42,3 +38,6 @@ app.post('/todos', (req, res) => {
 app.listen(3000, () => {
     console.log('Started on port 3000');
     });
+
+
+    module.exports = {app};
