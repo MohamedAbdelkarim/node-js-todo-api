@@ -1,3 +1,5 @@
+
+
 const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
@@ -51,6 +53,28 @@ userSchema.methods.generateAuthToken = function () {
         return token;
     })
 };
+
+userSchema.statics.findByToken = function (token) {
+    var User = this;
+    var decoded;
+
+    try {
+        decoded = jwt.verify(token,'abc123');
+    } catch (e) {
+        // return new Promise ((resolve, reject) => {
+        //     reject();
+
+        // });
+        return Promise.reject();
+    }
+
+    return User.findOne ({
+        '_id': decoded._id,
+        'tokens.token': token,
+        'tokens.access': 'auth',
+    });
+}
+
 var User = mongoose.model('User', userSchema);
 
 /* var newUser = new User({
